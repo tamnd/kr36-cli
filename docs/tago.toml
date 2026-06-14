@@ -1,0 +1,10 @@
+title       = "kr36"
+baseURL     = "https://kr36-cli-cli.tamnd.com/"
+description = "Browse 36kr Chinese tech news via RSS (36氪)"
+contentDir  = "content"
+outputDir   = "public"
+theme       = "tago-doks"
+syntaxHighlight = "true"
+
+[params]
+github = "https://github.com/tamnd/kr36-cli-cli"
