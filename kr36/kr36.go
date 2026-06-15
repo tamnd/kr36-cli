@@ -21,6 +21,9 @@ import (
 // DefaultUserAgent identifies the client to 36kr.
 const DefaultUserAgent = "Mozilla/5.0 (compatible; kr36/dev; +https://github.com/tamnd/kr36-cli)"
 
+// Host is the canonical site hostname.
+const Host = "36kr.com"
+
 // Config holds constructor parameters.
 type Config struct {
 	BaseURL   string
@@ -59,6 +62,10 @@ func NewClient(cfg Config) *Client {
 
 // htmlTagRe strips HTML tags from description fields.
 var htmlTagRe = regexp.MustCompile(`<[^>]+>`)
+
+// articleIDRe extracts the numeric ID from a 36kr article URL like
+// https://36kr.com/p/1234567890?f=rss
+var articleIDRe = regexp.MustCompile(`/p/(\d+)`)
 
 // stripHTML removes HTML tags and collapses whitespace.
 func stripHTML(s string) string {
@@ -103,12 +110,24 @@ func (c *Client) News(ctx context.Context, limit int) ([]Article, error) {
 
 	out := make([]Article, 0, len(items))
 	for i, it := range items {
+		link := strings.TrimSpace(it.Link)
+		// Extract the numeric article ID from the URL.
+		id := link
+		if m := articleIDRe.FindStringSubmatch(link); len(m) >= 2 {
+			id = m[1]
+		}
+		// Strip feed-tracking query parameters from the URL.
+		cleanURL := link
+		if idx := strings.IndexByte(cleanURL, '?'); idx >= 0 {
+			cleanURL = cleanURL[:idx]
+		}
 		out = append(out, Article{
 			Rank:    i + 1,
+			ID:      id,
 			Title:   strings.TrimSpace(it.Title),
 			Summary: stripHTML(it.Description),
 			PubDate: parsePubDate(it.PubDate),
-			URL:     strings.TrimSpace(it.Link),
+			URL:     cleanURL,
 		})
 	}
 	return out, nil

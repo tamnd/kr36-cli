@@ -17,9 +17,10 @@ type rssItem struct {
 
 // Article is the public record type returned by Client.News.
 type Article struct {
-	Rank    int    `json:"rank"`
-	Title   string `json:"title"`
-	Summary string `json:"summary"`
-	PubDate string `json:"pub_date"`
-	URL     string `json:"url"`
+	Rank    int    `json:"rank"               table:"rank"`
+	ID      string `json:"id"      kit:"id"   table:"id"`
+	Title   string `json:"title"              table:"title"`
+	Summary string `json:"summary,omitempty"  table:"-"`
+	PubDate string `json:"pub_date,omitempty" table:"pub_date"`
+	URL     string `json:"url"                table:"url,url"`
 }
