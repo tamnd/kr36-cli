@@ -104,11 +104,11 @@ func (c *Client) News(ctx context.Context, limit int) ([]Article, error) {
 	out := make([]Article, 0, len(items))
 	for i, it := range items {
 		out = append(out, Article{
-			Rank:    i + 1,
-			Title:   strings.TrimSpace(it.Title),
-			Summary: stripHTML(it.Description),
-			PubDate: parsePubDate(it.PubDate),
-			URL:     strings.TrimSpace(it.Link),
+			Rank:      i + 1,
+			Title:     strings.TrimSpace(it.Title),
+			Summary:   stripHTML(it.Description),
+			Published: parsePubDate(it.PubDate),
+			URL:       strings.TrimSpace(it.Link),
 		})
 	}
 	return out, nil
