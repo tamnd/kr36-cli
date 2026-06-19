@@ -8,7 +8,7 @@ import (
 func (a *App) newsCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "news",
-		Short: "List the latest 36kr articles",
+		Short: "List the latest articles from 36kr",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			n := a.effectiveLimit(20)
 			a.progressf("fetching %d articles from 36kr RSS...", n)
